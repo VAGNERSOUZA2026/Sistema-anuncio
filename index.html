@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Player de Anúncios</title>
 
 <style>
@@ -16,14 +15,21 @@
 html, body {
   width: 100%;
   height: 100%;
-  background: black;
+  background: #000;
   overflow: hidden;
 }
 
-#anuncio {
+#player {
   width: 100vw;
   height: 100vh;
+}
+
+#player img,
+#player video {
+  width: 100%;
+  height: 100%;
   object-fit: contain;
+  background: #000;
   display: block;
 }
 </style>
@@ -31,29 +37,70 @@ html, body {
 
 <body>
 
-<img id="anuncio" src="file_0000000096a48208947fff63e416a78d.png">
+<div id="player"></div>
 
 <script>
-
 const anuncios = [
-  "file_0000000096a48208947fff63e416a78d.png",
-  "file_00000000fda88210b6fc11d93c25ec5b.png"
+  {
+    tipo: "imagem",
+    arquivo: "file_0000000096a48208947fff63e416a78d.png",
+    tempo: 5000
+  },
+  {
+    tipo: "imagem",
+    arquivo: "file_00000000fda88210b6fc11d93c25ec5b.png",
+    tempo: 5000
+  },
+  {
+    tipo: "video",
+    arquivo: "video1.mp4"
+  }
 ];
 
 let atual = 0;
+const player = document.getElementById("player");
 
-setInterval(() => {
+function proximo() {
 
+  const anuncio = anuncios[atual];
+
+  player.innerHTML = "";
+
+  if (anuncio.tipo === "imagem") {
+
+    const img = document.createElement("img");
+    img.src = anuncio.arquivo;
+
+    player.appendChild(img);
+
+    setTimeout(avancar, anuncio.tempo);
+
+  } else if (anuncio.tipo === "video") {
+
+    const video = document.createElement("video");
+
+    video.src = anuncio.arquivo;
+    video.autoplay = true;
+    video.muted = true;
+    video.playsInline = true;
+
+    player.appendChild(video);
+
+    video.onended = avancar;
+  }
+}
+
+function avancar() {
   atual++;
 
   if (atual >= anuncios.length) {
     atual = 0;
   }
 
-  document.getElementById("anuncio").src = anuncios[atual];
+  proximo();
+}
 
-}, 5000);
-
+proximo();
 </script>
 
 </body>
