@@ -1,1 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Painel - Sistema de Anúncios</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #101114;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+header {
+  background: #191b20;
+  padding: 22px;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 25px;
+}
+
+header p {
+  color: #999;
+  margin-bottom: 0;
+}
+
+main {
+  padding: 20px;
+  max-width: 700px;
+  margin: auto;
+}
+
+.card {
+  background: #1c1f24;
+  padding: 20px;
+  border-radius: 14px;
+  margin-bottom: 15px;
+}
+
+.card h2 {
+  margin-top: 0;
+  font-size: 20px;
+}
+
+button {
+  width: 100%;
+  padding: 15px;
+  margin-top: 8px;
+  border: 0;
+  border-radius: 9px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.azul {
+  background: #2979ff;
+  color: white;
+}
+
+.verde {
+  background: #00a86b;
+  color: white;
+}
+
+.cinza {
+  background: #343840;
+  color: white;
+}
+
+.status {
+  color: #4ade80;
+  font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>📺 Sistema de Anúncios</h1>
+  <p>Painel Administrativo</p>
+</header>
+
+<main>
+
+  <div class="card">
+    <h2>🖥️ Player</h2>
+    <p class="status">● Online</p>
+
+    <button class="verde"
+      onclick="window.open('index.html','_blank')">
+      Abrir Player
+    </button>
+  </div>
+
+  <div class="card">
+    <h2>📢 Anúncios</h2>
+
+    <button class="azul">
+      ➕ Adicionar anúncio
+    </button>
+
+    <button class="cinza">
+      📂 Meus anúncios
+    </button>
+  </div>
+
+  <div class="card">
+    <h2>📋 Playlist</h2>
+
+    <button class="cinza">
+      Gerenciar Playlist
+    </button>
+  </div>
+
+  <div class="card">
+    <h2>🖥️ Telas</h2>
+
+    <button class="cinza">
+      Gerenciar TVs
+    </button>
+  </div>
+
+  <div class="card">
+    <h2>🕐 Programação</h2>
+
+    <button class="cinza">
+      Definir horários
+    </button>
+  </div>
+
+</main>
+
+</body>
+</html>
