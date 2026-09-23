@@ -40,23 +40,8 @@ html, body {
 <div id="player"></div>
 
 <script>
-const anuncios = [
-  {
-    tipo: "imagem",
-    arquivo: "file_0000000096a48208947fff63e416a78d.png",
-    tempo: 5000
-  },
-  {
-    tipo: "imagem",
-    arquivo: "file_00000000fda88210b6fc11d93c25ec5b.png",
-    tempo: 5000
-  },
-  {
-    tipo: "video",
-    arquivo: "video1.mp4"
-  }
-];
-
+let anuncios = [];
+  
 let atual = 0;
 const player = document.getElementById("player");
 
@@ -100,7 +85,7 @@ function avancar() {
   proximo();
 }
 
-proximo();
+
 
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -109,6 +94,25 @@ const SUPABASE_URL = 'https://brqdnhqifzlqktxvvltb.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_gEyJhAbQyOgfsnLnaifhcQ_6yso2x3p';
 
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    async function carregarAnuncios() {
+  const { data, error } = await db
+    .from('anuncios')
+    .select('*')
+    .eq('ativo', true);
+
+  if (error) {
+    console.error('Erro ao carregar anúncios:', error);
+    return;
+  }
+
+  anuncios = data;
+
+  if (anuncios.length > 0) {
+    proximo();
+  }
+}
+
+carregarAnuncios();
 </script>
 </body>
 </html>
