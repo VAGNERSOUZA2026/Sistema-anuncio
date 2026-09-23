@@ -1,58 +1,60 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema de Anúncios</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<title>Player de Anúncios</title>
 
-    body {
-      background: #000;
-      color: white;
-      font-family: Arial, sans-serif;
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+html, body {
+  width: 100%;
+  height: 100%;
+  background: black;
+  overflow: hidden;
+}
 
-    .player {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 60px;
-    }
-
-    p {
-      font-size: 28px;
-      margin-top: 20px;
-    }
-  </style>
+#anuncio {
+  width: 100vw;
+  height: 100vh;
+  object-fit: contain;
+  display: block;
+}
+</style>
 </head>
 
 <body>
 
-  <div class="player">
-    <div>
-      <h1>📺 Sistema de Anúncios</h1>
-      <p>Player funcionando!</p>
-    </div>
-  </div>
+<img id="anuncio" src="file_0000000096a48208947fff63e416a78d.png">
+
+<script>
+
+const anuncios = [
+  "file_0000000096a48208947fff63e416a78d.png",
+  "file_00000000fda88210b6fc11d93c25ec5b.png"
+];
+
+let atual = 0;
+
+setInterval(() => {
+
+  atual++;
+
+  if (atual >= anuncios.length) {
+    atual = 0;
+  }
+
+  document.getElementById("anuncio").src = anuncios[atual];
+
+}, 5000);
+
+</script>
 
 </body>
 </html>
