@@ -163,10 +163,7 @@ label {
 
 <main>
 
-  <!-- PLAYER -->
-
   <div class="card">
-
     <h2>🖥️ Player</h2>
 
     <p class="status">
@@ -178,11 +175,8 @@ label {
       onclick="window.open('index.html','_blank')">
       Abrir Player
     </button>
-
   </div>
 
-
-  <!-- ANÚNCIOS -->
 
   <div class="card">
 
@@ -253,54 +247,39 @@ label {
       📂 Meus anúncios
     </button>
 
-
     <div id="listaAnuncios"></div>
 
   </div>
 
 
-  <!-- PLAYLIST -->
-
   <div class="card">
-
     <h2>📋 Playlist</h2>
 
     <button class="cinza">
       Gerenciar Playlist
     </button>
-
   </div>
 
 
-  <!-- TELAS -->
-
   <div class="card">
-
     <h2>🖥️ Telas</h2>
 
     <button class="cinza">
       Gerenciar TVs
     </button>
-
   </div>
 
 
-  <!-- PROGRAMAÇÃO -->
-
   <div class="card">
-
     <h2>🕐 Programação</h2>
 
     <button class="cinza">
       Definir horários
     </button>
-
   </div>
 
 </main>
 
-
-<!-- SUPABASE -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -310,12 +289,19 @@ const SUPABASE_URL =
 'https://brqdnhqifzlqktxvvltb.supabase.co';
 
 const SUPABASE_KEY =
-'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJycWRuaHFpZnpscWt0eHZ2bHRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxOTc0NDgsImV4cCI6MjEwNTc3MzQ0OH0.K74Qm65r5UuyWy1BUG3RVDzqV6YzJfk7WMDdhz9_lnw';
+'COLE_AQUI_SUA_CHAVE_ANON';
 
-const db =
-supabase.createClient(
+
+const db = supabase.createClient(
   SUPABASE_URL,
-  SUPABASE_KEY
+  SUPABASE_KEY,
+  {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false
+    }
+  }
 );
 
 
@@ -395,9 +381,7 @@ async function salvarAnuncio() {
   let tipo = 'imagem';
 
 
-  if (
-    arquivo.type.startsWith('video/')
-  ) {
+  if (arquivo.type.startsWith('video/')) {
 
     tipo = 'video';
 
@@ -405,11 +389,10 @@ async function salvarAnuncio() {
 
 
   const nomeLimpo =
-    arquivo.name
-      .replace(
-        /[^a-zA-Z0-9._-]/g,
-        '_'
-      );
+    arquivo.name.replace(
+      /[^a-zA-Z0-9._-]/g,
+      '_'
+    );
 
 
   const nomeArquivo =
@@ -418,7 +401,7 @@ async function salvarAnuncio() {
     nomeLimpo;
 
 
-  /* UPLOAD */
+  /* UPLOAD PARA STORAGE */
 
   const {
     data: uploadData,
@@ -488,18 +471,15 @@ async function salvarAnuncio() {
   let duracaoFinal = null;
 
 
-  if (
-    tipo === 'imagem'
-  ) {
+  if (tipo === 'imagem') {
 
     duracaoFinal =
-      Number(duracao) *
-      1000;
+      Number(duracao) * 1000;
 
   }
 
 
-  /* CADASTRAR NO BANCO */
+  /* SALVAR NA TABELA */
 
   const {
     data: anuncioCriado,
@@ -544,26 +524,18 @@ async function salvarAnuncio() {
     '✅ Anúncio cadastrado com sucesso!';
 
 
-  /* LIMPAR FORMULÁRIO */
-
   document
-    .getElementById(
-      'nomeAnuncio'
-    )
+    .getElementById('nomeAnuncio')
     .value = '';
 
 
   document
-    .getElementById(
-      'arquivoAnuncio'
-    )
+    .getElementById('arquivoAnuncio')
     .value = '';
 
 
   document
-    .getElementById(
-      'duracaoAnuncio'
-    )
+    .getElementById('duracaoAnuncio')
     .value = '5';
 
 }
@@ -616,9 +588,7 @@ async function mostrarAnuncios() {
       );
 
 
-  if (
-    lista.style.display === 'block'
-  ) {
+  if (lista.style.display === 'block') {
 
     lista.style.display =
       'none';
@@ -643,9 +613,7 @@ async function mostrarAnuncios() {
   lista.innerHTML = '';
 
 
-  if (
-    anuncios.length === 0
-  ) {
+  if (anuncios.length === 0) {
 
     lista.innerHTML =
       '<p>Nenhum anúncio cadastrado.</p>';
@@ -660,22 +628,16 @@ async function mostrarAnuncios() {
 
       const card =
         document
-          .createElement(
-            'div'
-          );
+          .createElement('div');
 
 
       card.className =
         'anuncio-item';
 
 
-      /* NOME */
-
       const nome =
         document
-          .createElement(
-            'strong'
-          );
+          .createElement('strong');
 
 
       nome.textContent =
@@ -683,23 +645,16 @@ async function mostrarAnuncios() {
         'Sem nome';
 
 
-      card.appendChild(
-        nome
-      );
+      card.appendChild(nome);
 
 
-      /* PREVIEW */
+      /* IMAGEM */
 
-      if (
-        anuncio.tipo ===
-        'imagem'
-      ) {
+      if (anuncio.tipo === 'imagem') {
 
         const img =
           document
-            .createElement(
-              'img'
-            );
+            .createElement('img');
 
 
         img.src =
@@ -710,23 +665,18 @@ async function mostrarAnuncios() {
           'preview';
 
 
-        card.appendChild(
-          img
-        );
+        card.appendChild(img);
 
       }
 
 
-      if (
-        anuncio.tipo ===
-        'video'
-      ) {
+      /* VÍDEO */
+
+      if (anuncio.tipo === 'video') {
 
         const video =
           document
-            .createElement(
-              'video'
-            );
+            .createElement('video');
 
 
         video.src =
@@ -741,20 +691,14 @@ async function mostrarAnuncios() {
           'preview';
 
 
-        card.appendChild(
-          video
-        );
+        card.appendChild(video);
 
       }
 
 
-      /* TIPO */
-
       const tipo =
         document
-          .createElement(
-            'p'
-          );
+          .createElement('p');
 
 
       tipo.textContent =
@@ -762,23 +706,16 @@ async function mostrarAnuncios() {
         anuncio.tipo;
 
 
-      card.appendChild(
-        tipo
-      );
+      card.appendChild(tipo);
 
-
-      /* DURAÇÃO */
 
       const duracao =
         document
-          .createElement(
-            'p'
-          );
+          .createElement('p');
 
 
       if (
-        anuncio.tipo ===
-        'imagem' &&
+        anuncio.tipo === 'imagem' &&
         anuncio.duracao
       ) {
 
@@ -798,23 +735,15 @@ async function mostrarAnuncios() {
       }
 
 
-      card.appendChild(
-        duracao
-      );
+      card.appendChild(duracao);
 
-
-      /* STATUS */
 
       const status =
         document
-          .createElement(
-            'p'
-          );
+          .createElement('p');
 
 
-      if (
-        anuncio.ativo
-      ) {
+      if (anuncio.ativo) {
 
         status.textContent =
           '● Status: Ativo';
@@ -833,14 +762,9 @@ async function mostrarAnuncios() {
       }
 
 
-      card.appendChild(
-        status
-      );
+      card.appendChild(status);
 
-
-      lista.appendChild(
-        card
-      );
+      lista.appendChild(card);
 
     }
   );
