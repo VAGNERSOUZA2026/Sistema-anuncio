@@ -47,6 +47,11 @@ main {
   margin-bottom: 15px;
 }
 
+.card h2 {
+  margin-top: 0;
+  font-size: 20px;
+}
+
 button {
   width: 100%;
   padding: 15px;
@@ -92,6 +97,7 @@ input {
 label {
   display: block;
   margin-top: 10px;
+  font-weight: bold;
 }
 
 #formAnuncio {
@@ -115,8 +121,30 @@ label {
   border: 1px solid #343840;
 }
 
+.anuncio-item strong {
+  font-size: 18px;
+}
+
+.anuncio-item p {
+  margin: 8px 0;
+  color: #ccc;
+}
+
+.preview {
+  width: 100%;
+  max-height: 250px;
+  object-fit: contain;
+  background: black;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
 .ativo {
-  color: #4ade80;
+  color: #4ade80 !important;
+}
+
+.inativo {
+  color: #ff6b6b !important;
 }
 
 #mensagem {
@@ -135,125 +163,144 @@ label {
 
 <main>
 
-<div class="card">
+  <!-- PLAYER -->
 
-  <h2>🖥️ Player</h2>
+  <div class="card">
 
-  <p class="status">
-    ● Online
-  </p>
+    <h2>🖥️ Player</h2>
 
-  <button
-    class="verde"
-    onclick="window.open('index.html','_blank')">
-    Abrir Player
-  </button>
-
-</div>
-
-
-<div class="card">
-
-  <h2>📢 Anúncios</h2>
-
-  <button
-    class="azul"
-    onclick="abrirFormulario()">
-    ➕ Adicionar anúncio
-  </button>
-
-
-  <div id="formAnuncio">
-
-    <label>Nome do anúncio</label>
-
-    <input
-      type="text"
-      id="nomeAnuncio"
-      placeholder="Ex: Promoção de sábado">
-
-
-    <label>Imagem ou vídeo</label>
-
-    <input
-      type="file"
-      id="arquivoAnuncio"
-      accept="image/*,video/*">
-
-
-    <label>
-      Duração da imagem em segundos
-    </label>
-
-    <input
-      type="number"
-      id="duracaoAnuncio"
-      value="5"
-      min="1">
-
+    <p class="status">
+      ● Online
+    </p>
 
     <button
       class="verde"
-      onclick="salvarAnuncio()">
-      Salvar anúncio
+      onclick="window.open('index.html','_blank')">
+      Abrir Player
     </button>
-
-    <button
-      class="cinza"
-      onclick="fecharFormulario()">
-      Cancelar
-    </button>
-
-    <div id="mensagem"></div>
 
   </div>
 
 
-  <button
-    class="cinza"
-    onclick="mostrarAnuncios()">
-    📂 Meus anúncios
-  </button>
+  <!-- ANÚNCIOS -->
 
-  <div id="listaAnuncios"></div>
+  <div class="card">
 
-</div>
+    <h2>📢 Anúncios</h2>
 
-
-<div class="card">
-
-  <h2>📋 Playlist</h2>
-
-  <button class="cinza">
-    Gerenciar Playlist
-  </button>
-
-</div>
+    <button
+      class="azul"
+      onclick="abrirFormulario()">
+      ➕ Adicionar anúncio
+    </button>
 
 
-<div class="card">
+    <div id="formAnuncio">
 
-  <h2>🖥️ Telas</h2>
+      <label>
+        Nome do anúncio
+      </label>
 
-  <button class="cinza">
-    Gerenciar TVs
-  </button>
+      <input
+        type="text"
+        id="nomeAnuncio"
+        placeholder="Ex: Perfume Malbec">
 
-</div>
+
+      <label>
+        Imagem ou vídeo
+      </label>
+
+      <input
+        type="file"
+        id="arquivoAnuncio"
+        accept="image/*,video/*">
 
 
-<div class="card">
+      <label>
+        Duração da imagem em segundos
+      </label>
 
-  <h2>🕐 Programação</h2>
+      <input
+        type="number"
+        id="duracaoAnuncio"
+        value="5"
+        min="1">
 
-  <button class="cinza">
-    Definir horários
-  </button>
 
-</div>
+      <button
+        class="verde"
+        onclick="salvarAnuncio()">
+        Salvar anúncio
+      </button>
+
+
+      <button
+        class="cinza"
+        onclick="fecharFormulario()">
+        Cancelar
+      </button>
+
+
+      <div id="mensagem"></div>
+
+    </div>
+
+
+    <button
+      class="cinza"
+      onclick="mostrarAnuncios()">
+      📂 Meus anúncios
+    </button>
+
+
+    <div id="listaAnuncios"></div>
+
+  </div>
+
+
+  <!-- PLAYLIST -->
+
+  <div class="card">
+
+    <h2>📋 Playlist</h2>
+
+    <button class="cinza">
+      Gerenciar Playlist
+    </button>
+
+  </div>
+
+
+  <!-- TELAS -->
+
+  <div class="card">
+
+    <h2>🖥️ Telas</h2>
+
+    <button class="cinza">
+      Gerenciar TVs
+    </button>
+
+  </div>
+
+
+  <!-- PROGRAMAÇÃO -->
+
+  <div class="card">
+
+    <h2>🕐 Programação</h2>
+
+    <button class="cinza">
+      Definir horários
+    </button>
+
+  </div>
 
 </main>
 
+
+<!-- SUPABASE -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -263,7 +310,7 @@ const SUPABASE_URL =
 'https://brqdnhqifzlqktxvvltb.supabase.co';
 
 const SUPABASE_KEY =
-'COLE_AQUI_A_MESMA_PUBLISHABLE_KEY';
+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJycWRuaHFpZnpscWt0eHZ2bHRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxOTc0NDgsImV4cCI6MjEwNTc3MzQ0OH0.K74Qm65r5UuyWy1BUG3RVDzqV6YzJfk7WMDdhz9_lnw';
 
 const db =
 supabase.createClient(
@@ -303,15 +350,18 @@ async function salvarAnuncio() {
       .getElementById('nomeAnuncio')
       .value.trim();
 
+
   const arquivo =
     document
       .getElementById('arquivoAnuncio')
       .files[0];
 
+
   const duracao =
     document
       .getElementById('duracaoAnuncio')
       .value;
+
 
   const mensagem =
     document
@@ -324,6 +374,7 @@ async function salvarAnuncio() {
       'Digite o nome do anúncio.';
 
     return;
+
   }
 
 
@@ -333,6 +384,7 @@ async function salvarAnuncio() {
       'Escolha uma imagem ou vídeo.';
 
     return;
+
   }
 
 
@@ -341,6 +393,7 @@ async function salvarAnuncio() {
 
 
   let tipo = 'imagem';
+
 
   if (
     arquivo.type.startsWith('video/')
@@ -353,7 +406,10 @@ async function salvarAnuncio() {
 
   const nomeLimpo =
     arquivo.name
-      .replace(/[^a-zA-Z0-9._-]/g, '_');
+      .replace(
+        /[^a-zA-Z0-9._-]/g,
+        '_'
+      );
 
 
   const nomeArquivo =
@@ -362,9 +418,10 @@ async function salvarAnuncio() {
     nomeLimpo;
 
 
-  /* UPLOAD PARA STORAGE */
+  /* UPLOAD */
 
   const {
+    data: uploadData,
     error: erroUpload
   } =
     await db
@@ -372,22 +429,38 @@ async function salvarAnuncio() {
       .from('midias')
       .upload(
         nomeArquivo,
-        arquivo
+        arquivo,
+        {
+          cacheControl: '3600',
+          upsert: false,
+          contentType: arquivo.type
+        }
       );
 
 
   if (erroUpload) {
 
-    console.error(erroUpload);
+    console.error(
+      'Erro no upload:',
+      erroUpload
+    );
 
     mensagem.textContent =
-      'Erro ao enviar arquivo.';
+      'Erro ao enviar arquivo: ' +
+      erroUpload.message;
 
     return;
+
   }
 
 
-  /* PEGAR URL PÚBLICA */
+  console.log(
+    'Upload concluído:',
+    uploadData
+  );
+
+
+  /* URL PÚBLICA */
 
   const {
     data: dadosUrl
@@ -395,26 +468,41 @@ async function salvarAnuncio() {
     db
       .storage
       .from('midias')
-      .getPublicUrl(nomeArquivo);
+      .getPublicUrl(
+        nomeArquivo
+      );
 
 
   const urlArquivo =
     dadosUrl.publicUrl;
 
 
-  /* SALVAR NO BANCO */
+  console.log(
+    'URL pública:',
+    urlArquivo
+  );
+
+
+  /* DURAÇÃO */
 
   let duracaoFinal = null;
 
-  if (tipo === 'imagem') {
+
+  if (
+    tipo === 'imagem'
+  ) {
 
     duracaoFinal =
-      Number(duracao) * 1000;
+      Number(duracao) *
+      1000;
 
   }
 
 
+  /* CADASTRAR NO BANCO */
+
   const {
+    data: anuncioCriado,
     error: erroBanco
   } =
     await db
@@ -427,36 +515,55 @@ async function salvarAnuncio() {
           duracao: duracaoFinal,
           ativo: true
         }
-      ]);
+      ])
+      .select();
 
 
   if (erroBanco) {
 
-    console.error(erroBanco);
+    console.error(
+      'Erro no banco:',
+      erroBanco
+    );
 
     mensagem.textContent =
-      'Arquivo enviado, mas houve erro ao cadastrar o anúncio.';
+      'Arquivo enviado, mas ocorreu erro ao cadastrar o anúncio.';
 
     return;
+
   }
+
+
+  console.log(
+    'Anúncio criado:',
+    anuncioCriado
+  );
 
 
   mensagem.textContent =
     '✅ Anúncio cadastrado com sucesso!';
 
 
+  /* LIMPAR FORMULÁRIO */
+
   document
-    .getElementById('nomeAnuncio')
+    .getElementById(
+      'nomeAnuncio'
+    )
     .value = '';
 
 
   document
-    .getElementById('arquivoAnuncio')
+    .getElementById(
+      'arquivoAnuncio'
+    )
     .value = '';
 
 
   document
-    .getElementById('duracaoAnuncio')
+    .getElementById(
+      'duracaoAnuncio'
+    )
     .value = '5';
 
 }
@@ -489,6 +596,7 @@ async function carregarAnunciosPainel() {
     );
 
     return [];
+
   }
 
 
@@ -512,13 +620,17 @@ async function mostrarAnuncios() {
     lista.style.display === 'block'
   ) {
 
-    lista.style.display = 'none';
+    lista.style.display =
+      'none';
 
     return;
+
   }
 
 
-  lista.style.display = 'block';
+  lista.style.display =
+    'block';
+
 
   lista.innerHTML =
     '<p>Carregando...</p>';
@@ -539,6 +651,7 @@ async function mostrarAnuncios() {
       '<p>Nenhum anúncio cadastrado.</p>';
 
     return;
+
   }
 
 
@@ -547,16 +660,22 @@ async function mostrarAnuncios() {
 
       const card =
         document
-          .createElement('div');
+          .createElement(
+            'div'
+          );
 
 
       card.className =
         'anuncio-item';
 
 
+      /* NOME */
+
       const nome =
         document
-          .createElement('strong');
+          .createElement(
+            'strong'
+          );
 
 
       nome.textContent =
@@ -564,9 +683,78 @@ async function mostrarAnuncios() {
         'Sem nome';
 
 
+      card.appendChild(
+        nome
+      );
+
+
+      /* PREVIEW */
+
+      if (
+        anuncio.tipo ===
+        'imagem'
+      ) {
+
+        const img =
+          document
+            .createElement(
+              'img'
+            );
+
+
+        img.src =
+          anuncio.arquivo;
+
+
+        img.className =
+          'preview';
+
+
+        card.appendChild(
+          img
+        );
+
+      }
+
+
+      if (
+        anuncio.tipo ===
+        'video'
+      ) {
+
+        const video =
+          document
+            .createElement(
+              'video'
+            );
+
+
+        video.src =
+          anuncio.arquivo;
+
+
+        video.controls =
+          true;
+
+
+        video.className =
+          'preview';
+
+
+        card.appendChild(
+          video
+        );
+
+      }
+
+
+      /* TIPO */
+
       const tipo =
         document
-          .createElement('p');
+          .createElement(
+            'p'
+          );
 
 
       tipo.textContent =
@@ -574,19 +762,32 @@ async function mostrarAnuncios() {
         anuncio.tipo;
 
 
+      card.appendChild(
+        tipo
+      );
+
+
+      /* DURAÇÃO */
+
       const duracao =
         document
-          .createElement('p');
+          .createElement(
+            'p'
+          );
 
 
       if (
-        anuncio.tipo === 'imagem' &&
+        anuncio.tipo ===
+        'imagem' &&
         anuncio.duracao
       ) {
 
         duracao.textContent =
           'Duração: ' +
-          anuncio.duracao / 1000 +
+          (
+            anuncio.duracao /
+            1000
+          ) +
           ' segundos';
 
       } else {
@@ -597,28 +798,49 @@ async function mostrarAnuncios() {
       }
 
 
+      card.appendChild(
+        duracao
+      );
+
+
+      /* STATUS */
+
       const status =
         document
-          .createElement('p');
+          .createElement(
+            'p'
+          );
 
 
-      status.className =
-        'ativo';
-
-
-      status.textContent =
+      if (
         anuncio.ativo
-          ? '● Ativo'
-          : '● Inativo';
+      ) {
+
+        status.textContent =
+          '● Status: Ativo';
+
+        status.className =
+          'ativo';
+
+      } else {
+
+        status.textContent =
+          '● Status: Inativo';
+
+        status.className =
+          'inativo';
+
+      }
 
 
-      card.appendChild(nome);
-      card.appendChild(tipo);
-      card.appendChild(duracao);
-      card.appendChild(status);
+      card.appendChild(
+        status
+      );
 
 
-      lista.appendChild(card);
+      lista.appendChild(
+        card
+      );
 
     }
   );
