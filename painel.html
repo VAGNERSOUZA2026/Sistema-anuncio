@@ -82,6 +82,38 @@ button {
   color: #4ade80;
   font-weight: bold;
 }
+
+/* LISTA DE ANÚNCIOS */
+
+#listaAnuncios {
+  display: none;
+  margin-top: 15px;
+}
+
+.anuncio-item {
+  background: #101114;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 10px;
+  border: 1px solid #343840;
+}
+
+.anuncio-item strong {
+  font-size: 18px;
+}
+
+.anuncio-item p {
+  margin: 8px 0;
+  color: #ccc;
+}
+
+.ativo {
+  color: #4ade80 !important;
+}
+
+.inativo {
+  color: #ff6b6b !important;
+}
 </style>
 </head>
 
@@ -94,82 +126,267 @@ button {
 
 <main>
 
+  <!-- PLAYER -->
+
   <div class="card">
     <h2>🖥️ Player</h2>
-    <p class="status">● Online</p>
 
-    <button class="verde"
+    <p class="status">
+      ● Online
+    </p>
+
+    <button
+      class="verde"
       onclick="window.open('index.html','_blank')">
       Abrir Player
     </button>
+
   </div>
 
+
+  <!-- ANÚNCIOS -->
+
   <div class="card">
+
     <h2>📢 Anúncios</h2>
 
     <button class="azul">
       ➕ Adicionar anúncio
     </button>
 
-    <button class="cinza" onclick="mostrarAnuncios()">
+    <button
+      class="cinza"
+      onclick="mostrarAnuncios()">
       📂 Meus anúncios
     </button>
+
+    <div id="listaAnuncios"></div>
+
   </div>
 
+
+  <!-- PLAYLIST -->
+
   <div class="card">
+
     <h2>📋 Playlist</h2>
 
     <button class="cinza">
       Gerenciar Playlist
     </button>
+
   </div>
 
+
+  <!-- TELAS -->
+
   <div class="card">
+
     <h2>🖥️ Telas</h2>
 
     <button class="cinza">
       Gerenciar TVs
     </button>
+
   </div>
 
+
+  <!-- PROGRAMAÇÃO -->
+
   <div class="card">
+
     <h2>🕐 Programação</h2>
 
     <button class="cinza">
       Definir horários
     </button>
+
   </div>
 
 </main>
 
+
+<!-- SUPABASE -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-const SUPABASE_URL = 'https://brqdnhqifzlqktxvvltb.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_gEyJhAbQyOgfsnLnaifhcQ_6yso2x3p';
 
-const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_URL =
+'https://brqdnhqifzlqktxvvltb.supabase.co';
+
+const SUPABASE_KEY =
+'COLE_AQUI_SUA_PUBLISHABLE_KEY';
+
+const db =
+supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+/* CARREGAR ANÚNCIOS */
 
 async function carregarAnunciosPainel() {
-  const { data, error } = await db
-    .from('anuncios')
-    .select('*')
-    .order('created_at', { ascending: false });
+
+  const { data, error } =
+    await db
+      .from('anuncios')
+      .select('*')
+      .order(
+        'created_at',
+        { ascending: false }
+      );
 
   if (error) {
-    console.error('Erro ao carregar anúncios:', error);
+
+    console.error(
+      'Erro ao carregar anúncios:',
+      error
+    );
+
+    return [];
+  }
+
+  return data || [];
+}
+
+
+/* MOSTRAR ANÚNCIOS */
+
+async function mostrarAnuncios() {
+
+  const lista =
+    document.getElementById(
+      'listaAnuncios'
+    );
+
+  /*
+  Se a lista estiver aberta,
+  fecha ao clicar novamente.
+  */
+
+  if (
+    lista.style.display === 'block'
+  ) {
+
+    lista.style.display = 'none';
+
     return;
   }
 
-  console.log('Anúncios cadastrados:', data);
+
+  lista.innerHTML =
+    '<p>Carregando anúncios...</p>';
+
+  lista.style.display = 'block';
+
+
+  const anuncios =
+    await carregarAnunciosPainel();
+
+
+  lista.innerHTML = '';
+
+
+  if (anuncios.length === 0) {
+
+    lista.innerHTML =
+      '<p>Nenhum anúncio cadastrado.</p>';
+
+    return;
+  }
+
+
+  anuncios.forEach(anuncio => {
+
+    const card =
+      document.createElement('div');
+
+    card.className =
+      'anuncio-item';
+
+
+    /* NOME */
+
+    const nome =
+      document.createElement('strong');
+
+    nome.textContent =
+      anuncio.nome ||
+      'Anúncio sem nome';
+
+
+    /* TIPO */
+
+    const tipo =
+      document.createElement('p');
+
+    tipo.textContent =
+      'Tipo: ' +
+      (anuncio.tipo || '-');
+
+
+    /* DURAÇÃO */
+
+    const duracao =
+      document.createElement('p');
+
+    if (anuncio.duracao) {
+
+      duracao.textContent =
+        'Duração: ' +
+        (anuncio.duracao / 1000) +
+        ' segundos';
+
+    } else {
+
+      duracao.textContent =
+        'Duração: -';
+
+    }
+
+
+    /* STATUS */
+
+    const status =
+      document.createElement('p');
+
+    if (anuncio.ativo) {
+
+      status.textContent =
+        '● Status: Ativo';
+
+      status.className =
+        'ativo';
+
+    } else {
+
+      status.textContent =
+        '● Status: Inativo';
+
+      status.className =
+        'inativo';
+
+    }
+
+
+    /* ADICIONAR AO CARD */
+
+    card.appendChild(nome);
+    card.appendChild(tipo);
+    card.appendChild(duracao);
+    card.appendChild(status);
+
+
+    /* ADICIONAR À LISTA */
+
+    lista.appendChild(card);
+
+  });
+
 }
 
-function mostrarAnuncios() {
-  carregarAnunciosPainel();
-  alert('Anúncios carregados. Veja o Console para conferir.');
-}
-
-carregarAnunciosPainel();
 </script>
 
 </body>
