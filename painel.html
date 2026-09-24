@@ -47,11 +47,6 @@ main {
   margin-bottom: 15px;
 }
 
-.card h2 {
-  margin-top: 0;
-  font-size: 20px;
-}
-
 button {
   width: 100%;
   padding: 15px;
@@ -83,7 +78,29 @@ button {
   font-weight: bold;
 }
 
-/* LISTA DE ANÚNCIOS */
+input {
+  width: 100%;
+  padding: 13px;
+  margin-top: 8px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background: #101114;
+  color: white;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+}
+
+#formAnuncio {
+  display: none;
+  margin-top: 15px;
+  padding: 15px;
+  border-radius: 10px;
+  background: #101114;
+}
 
 #listaAnuncios {
   display: none;
@@ -98,21 +115,13 @@ button {
   border: 1px solid #343840;
 }
 
-.anuncio-item strong {
-  font-size: 18px;
-}
-
-.anuncio-item p {
-  margin: 8px 0;
-  color: #ccc;
-}
-
 .ativo {
-  color: #4ade80 !important;
+  color: #4ade80;
 }
 
-.inativo {
-  color: #ff6b6b !important;
+#mensagem {
+  margin-top: 12px;
+  font-weight: bold;
 }
 </style>
 </head>
@@ -126,87 +135,125 @@ button {
 
 <main>
 
-  <!-- PLAYER -->
+<div class="card">
 
-  <div class="card">
-    <h2>🖥️ Player</h2>
+  <h2>🖥️ Player</h2>
 
-    <p class="status">
-      ● Online
-    </p>
+  <p class="status">
+    ● Online
+  </p>
+
+  <button
+    class="verde"
+    onclick="window.open('index.html','_blank')">
+    Abrir Player
+  </button>
+
+</div>
+
+
+<div class="card">
+
+  <h2>📢 Anúncios</h2>
+
+  <button
+    class="azul"
+    onclick="abrirFormulario()">
+    ➕ Adicionar anúncio
+  </button>
+
+
+  <div id="formAnuncio">
+
+    <label>Nome do anúncio</label>
+
+    <input
+      type="text"
+      id="nomeAnuncio"
+      placeholder="Ex: Promoção de sábado">
+
+
+    <label>Imagem ou vídeo</label>
+
+    <input
+      type="file"
+      id="arquivoAnuncio"
+      accept="image/*,video/*">
+
+
+    <label>
+      Duração da imagem em segundos
+    </label>
+
+    <input
+      type="number"
+      id="duracaoAnuncio"
+      value="5"
+      min="1">
+
 
     <button
       class="verde"
-      onclick="window.open('index.html','_blank')">
-      Abrir Player
-    </button>
-
-  </div>
-
-
-  <!-- ANÚNCIOS -->
-
-  <div class="card">
-
-    <h2>📢 Anúncios</h2>
-
-    <button class="azul">
-      ➕ Adicionar anúncio
+      onclick="salvarAnuncio()">
+      Salvar anúncio
     </button>
 
     <button
       class="cinza"
-      onclick="mostrarAnuncios()">
-      📂 Meus anúncios
+      onclick="fecharFormulario()">
+      Cancelar
     </button>
 
-    <div id="listaAnuncios"></div>
+    <div id="mensagem"></div>
 
   </div>
 
 
-  <!-- PLAYLIST -->
+  <button
+    class="cinza"
+    onclick="mostrarAnuncios()">
+    📂 Meus anúncios
+  </button>
 
-  <div class="card">
+  <div id="listaAnuncios"></div>
 
-    <h2>📋 Playlist</h2>
-
-    <button class="cinza">
-      Gerenciar Playlist
-    </button>
-
-  </div>
+</div>
 
 
-  <!-- TELAS -->
+<div class="card">
 
-  <div class="card">
+  <h2>📋 Playlist</h2>
 
-    <h2>🖥️ Telas</h2>
+  <button class="cinza">
+    Gerenciar Playlist
+  </button>
 
-    <button class="cinza">
-      Gerenciar TVs
-    </button>
-
-  </div>
+</div>
 
 
-  <!-- PROGRAMAÇÃO -->
+<div class="card">
 
-  <div class="card">
+  <h2>🖥️ Telas</h2>
 
-    <h2>🕐 Programação</h2>
+  <button class="cinza">
+    Gerenciar TVs
+  </button>
 
-    <button class="cinza">
-      Definir horários
-    </button>
+</div>
 
-  </div>
+
+<div class="card">
+
+  <h2>🕐 Programação</h2>
+
+  <button class="cinza">
+    Definir horários
+  </button>
+
+</div>
 
 </main>
 
-
-<!-- SUPABASE -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -216,7 +263,7 @@ const SUPABASE_URL =
 'https://brqdnhqifzlqktxvvltb.supabase.co';
 
 const SUPABASE_KEY =
-'COLE_AQUI_SUA_PUBLISHABLE_KEY';
+'COLE_AQUI_A_MESMA_PUBLISHABLE_KEY';
 
 const db =
 supabase.createClient(
@@ -225,18 +272,214 @@ supabase.createClient(
 );
 
 
+/* ABRIR FORMULÁRIO */
+
+function abrirFormulario() {
+
+  document
+    .getElementById('formAnuncio')
+    .style.display = 'block';
+
+}
+
+
+/* FECHAR FORMULÁRIO */
+
+function fecharFormulario() {
+
+  document
+    .getElementById('formAnuncio')
+    .style.display = 'none';
+
+}
+
+
+/* SALVAR ANÚNCIO */
+
+async function salvarAnuncio() {
+
+  const nome =
+    document
+      .getElementById('nomeAnuncio')
+      .value.trim();
+
+  const arquivo =
+    document
+      .getElementById('arquivoAnuncio')
+      .files[0];
+
+  const duracao =
+    document
+      .getElementById('duracaoAnuncio')
+      .value;
+
+  const mensagem =
+    document
+      .getElementById('mensagem');
+
+
+  if (!nome) {
+
+    mensagem.textContent =
+      'Digite o nome do anúncio.';
+
+    return;
+  }
+
+
+  if (!arquivo) {
+
+    mensagem.textContent =
+      'Escolha uma imagem ou vídeo.';
+
+    return;
+  }
+
+
+  mensagem.textContent =
+    'Enviando arquivo...';
+
+
+  let tipo = 'imagem';
+
+  if (
+    arquivo.type.startsWith('video/')
+  ) {
+
+    tipo = 'video';
+
+  }
+
+
+  const nomeLimpo =
+    arquivo.name
+      .replace(/[^a-zA-Z0-9._-]/g, '_');
+
+
+  const nomeArquivo =
+    Date.now() +
+    '_' +
+    nomeLimpo;
+
+
+  /* UPLOAD PARA STORAGE */
+
+  const {
+    error: erroUpload
+  } =
+    await db
+      .storage
+      .from('midias')
+      .upload(
+        nomeArquivo,
+        arquivo
+      );
+
+
+  if (erroUpload) {
+
+    console.error(erroUpload);
+
+    mensagem.textContent =
+      'Erro ao enviar arquivo.';
+
+    return;
+  }
+
+
+  /* PEGAR URL PÚBLICA */
+
+  const {
+    data: dadosUrl
+  } =
+    db
+      .storage
+      .from('midias')
+      .getPublicUrl(nomeArquivo);
+
+
+  const urlArquivo =
+    dadosUrl.publicUrl;
+
+
+  /* SALVAR NO BANCO */
+
+  let duracaoFinal = null;
+
+  if (tipo === 'imagem') {
+
+    duracaoFinal =
+      Number(duracao) * 1000;
+
+  }
+
+
+  const {
+    error: erroBanco
+  } =
+    await db
+      .from('anuncios')
+      .insert([
+        {
+          nome: nome,
+          tipo: tipo,
+          arquivo: urlArquivo,
+          duracao: duracaoFinal,
+          ativo: true
+        }
+      ]);
+
+
+  if (erroBanco) {
+
+    console.error(erroBanco);
+
+    mensagem.textContent =
+      'Arquivo enviado, mas houve erro ao cadastrar o anúncio.';
+
+    return;
+  }
+
+
+  mensagem.textContent =
+    '✅ Anúncio cadastrado com sucesso!';
+
+
+  document
+    .getElementById('nomeAnuncio')
+    .value = '';
+
+
+  document
+    .getElementById('arquivoAnuncio')
+    .value = '';
+
+
+  document
+    .getElementById('duracaoAnuncio')
+    .value = '5';
+
+}
+
+
 /* CARREGAR ANÚNCIOS */
 
 async function carregarAnunciosPainel() {
 
-  const { data, error } =
+  const {
+    data,
+    error
+  } =
     await db
       .from('anuncios')
       .select('*')
       .order(
         'created_at',
-        { ascending: false }
+        {
+          ascending: false
+        }
       );
+
 
   if (error) {
 
@@ -248,7 +491,9 @@ async function carregarAnunciosPainel() {
     return [];
   }
 
+
   return data || [];
+
 }
 
 
@@ -257,14 +502,11 @@ async function carregarAnunciosPainel() {
 async function mostrarAnuncios() {
 
   const lista =
-    document.getElementById(
-      'listaAnuncios'
-    );
+    document
+      .getElementById(
+        'listaAnuncios'
+      );
 
-  /*
-  Se a lista estiver aberta,
-  fecha ao clicar novamente.
-  */
 
   if (
     lista.style.display === 'block'
@@ -276,10 +518,10 @@ async function mostrarAnuncios() {
   }
 
 
-  lista.innerHTML =
-    '<p>Carregando anúncios...</p>';
-
   lista.style.display = 'block';
+
+  lista.innerHTML =
+    '<p>Carregando...</p>';
 
 
   const anuncios =
@@ -289,7 +531,9 @@ async function mostrarAnuncios() {
   lista.innerHTML = '';
 
 
-  if (anuncios.length === 0) {
+  if (
+    anuncios.length === 0
+  ) {
 
     lista.innerHTML =
       '<p>Nenhum anúncio cadastrado.</p>';
@@ -298,92 +542,86 @@ async function mostrarAnuncios() {
   }
 
 
-  anuncios.forEach(anuncio => {
+  anuncios.forEach(
+    anuncio => {
 
-    const card =
-      document.createElement('div');
-
-    card.className =
-      'anuncio-item';
-
-
-    /* NOME */
-
-    const nome =
-      document.createElement('strong');
-
-    nome.textContent =
-      anuncio.nome ||
-      'Anúncio sem nome';
+      const card =
+        document
+          .createElement('div');
 
 
-    /* TIPO */
-
-    const tipo =
-      document.createElement('p');
-
-    tipo.textContent =
-      'Tipo: ' +
-      (anuncio.tipo || '-');
+      card.className =
+        'anuncio-item';
 
 
-    /* DURAÇÃO */
-
-    const duracao =
-      document.createElement('p');
-
-    if (anuncio.duracao) {
-
-      duracao.textContent =
-        'Duração: ' +
-        (anuncio.duracao / 1000) +
-        ' segundos';
-
-    } else {
-
-      duracao.textContent =
-        'Duração: -';
-
-    }
+      const nome =
+        document
+          .createElement('strong');
 
 
-    /* STATUS */
+      nome.textContent =
+        anuncio.nome ||
+        'Sem nome';
 
-    const status =
-      document.createElement('p');
 
-    if (anuncio.ativo) {
+      const tipo =
+        document
+          .createElement('p');
 
-      status.textContent =
-        '● Status: Ativo';
+
+      tipo.textContent =
+        'Tipo: ' +
+        anuncio.tipo;
+
+
+      const duracao =
+        document
+          .createElement('p');
+
+
+      if (
+        anuncio.tipo === 'imagem' &&
+        anuncio.duracao
+      ) {
+
+        duracao.textContent =
+          'Duração: ' +
+          anuncio.duracao / 1000 +
+          ' segundos';
+
+      } else {
+
+        duracao.textContent =
+          'Duração: vídeo completo';
+
+      }
+
+
+      const status =
+        document
+          .createElement('p');
+
 
       status.className =
         'ativo';
 
-    } else {
 
       status.textContent =
-        '● Status: Inativo';
+        anuncio.ativo
+          ? '● Ativo'
+          : '● Inativo';
 
-      status.className =
-        'inativo';
+
+      card.appendChild(nome);
+      card.appendChild(tipo);
+      card.appendChild(duracao);
+      card.appendChild(status);
+
+
+      lista.appendChild(card);
 
     }
-
-
-    /* ADICIONAR AO CARD */
-
-    card.appendChild(nome);
-    card.appendChild(tipo);
-    card.appendChild(duracao);
-    card.appendChild(status);
-
-
-    /* ADICIONAR À LISTA */
-
-    lista.appendChild(card);
-
-  });
+  );
 
 }
 
