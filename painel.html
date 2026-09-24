@@ -1,177 +1,777 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Player de Anúncios</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<title>Painel - Sistema de Anúncios</title>
 
-    html, body {
-      width: 100%;
-      height: 100%;
-      background: #000;
-      overflow: hidden;
-      font-family: Arial, sans-serif;
-    }
+<style>
+* {
+  box-sizing: border-box;
+}
 
-    #player {
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #000;
-    }
+body {
+  margin: 0;
+  background: #101114;
+  color: white;
+  font-family: Arial, sans-serif;
+}
 
-    #player img,
-    #player video {
-      width: 100%;
-      height: 100%;
-      object-fit: contain; /* se quiser preencher tudo, troque para cover */
-      background: #000;
-      display: block;
-    }
+header {
+  background: #191b20;
+  padding: 22px;
+  text-align: center;
+}
 
-    .mensagem {
-      color: white;
-      font-size: 24px;
-      text-align: center;
-      padding: 20px;
-    }
-  </style>
+header h1 {
+  margin: 0;
+  font-size: 25px;
+}
+
+header p {
+  color: #999;
+  margin-bottom: 0;
+}
+
+main {
+  padding: 20px;
+  max-width: 700px;
+  margin: auto;
+}
+
+.card {
+  background: #1c1f24;
+  padding: 20px;
+  border-radius: 14px;
+  margin-bottom: 15px;
+}
+
+.card h2 {
+  margin-top: 0;
+  font-size: 20px;
+}
+
+button {
+  width: 100%;
+  padding: 15px;
+  margin-top: 8px;
+  border: 0;
+  border-radius: 9px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.azul {
+  background: #2979ff;
+  color: white;
+}
+
+.verde {
+  background: #00a86b;
+  color: white;
+}
+
+.cinza {
+  background: #343840;
+  color: white;
+}
+
+.status {
+  color: #4ade80;
+  font-weight: bold;
+}
+
+input {
+  width: 100%;
+  padding: 13px;
+  margin-top: 8px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background: #101114;
+  color: white;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+#formAnuncio {
+  display: none;
+  margin-top: 15px;
+  padding: 15px;
+  border-radius: 10px;
+  background: #101114;
+}
+
+#listaAnuncios {
+  display: none;
+  margin-top: 15px;
+}
+
+.anuncio-item {
+  background: #101114;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 10px;
+  border: 1px solid #343840;
+}
+
+.anuncio-item strong {
+  font-size: 18px;
+}
+
+.anuncio-item p {
+  margin: 8px 0;
+  color: #ccc;
+}
+
+.preview {
+  width: 100%;
+  max-height: 250px;
+  object-fit: contain;
+  background: black;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.ativo {
+  color: #4ade80 !important;
+}
+
+.inativo {
+  color: #ff6b6b !important;
+}
+
+#mensagem {
+  margin-top: 12px;
+  font-weight: bold;
+}
+</style>
 </head>
+
 <body>
 
-  <div id="player">
-    <div class="mensagem">Carregando anúncios...</div>
+<header>
+  <h1>📺 Sistema de Anúncios</h1>
+  <p>Painel Administrativo</p>
+</header>
+
+<main>
+
+  <div class="card">
+    <h2>🖥️ Player</h2>
+
+    <p class="status">
+      ● Online
+    </p>
+
+    <button
+      class="verde"
+      onclick="window.open('index.html','_blank')">
+      Abrir Player
+    </button>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    const SUPABASE_URL = 'https://brqdnhqifzlqktxvvltb.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJycWRuaHFpZnpscWt0eHZ2bHRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxOTc0NDgsImV4cCI6MjEwNTc3MzQ0OH0.K74Qm65r5UuyWy1BUG3RVDzqV6YzJfk7WMDdhz9_lnw';
 
-    const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  <div class="card">
 
-    const player = document.getElementById('player');
-    let anuncios = [];
-    let atual = 0;
-    let timer = null;
+    <h2>📢 Anúncios</h2>
 
-    function limparPlayer() {
-      if (timer) {
-        clearTimeout(timer);
-        timer = null;
-      }
-      player.innerHTML = '';
+    <button
+      class="azul"
+      onclick="abrirFormulario()">
+      ➕ Adicionar anúncio
+    </button>
+
+
+    <div id="formAnuncio">
+
+      <label>
+        Nome do anúncio
+      </label>
+
+      <input
+        type="text"
+        id="nomeAnuncio"
+        placeholder="Ex: Perfume Malbec">
+
+
+      <label>
+        Imagem ou vídeo
+      </label>
+
+      <input
+        type="file"
+        id="arquivoAnuncio"
+        accept="image/*,video/*">
+
+
+      <label>
+        Duração da imagem em segundos
+      </label>
+
+      <input
+        type="number"
+        id="duracaoAnuncio"
+        value="5"
+        min="1">
+
+
+      <button
+        class="verde"
+        onclick="salvarAnuncio()">
+        Salvar anúncio
+      </button>
+
+
+      <button
+        class="cinza"
+        onclick="fecharFormulario()">
+        Cancelar
+      </button>
+
+
+      <div id="mensagem"></div>
+
+    </div>
+
+
+    <button
+      class="cinza"
+      onclick="mostrarAnuncios()">
+      📂 Meus anúncios
+    </button>
+
+    <div id="listaAnuncios"></div>
+
+  </div>
+
+
+  <div class="card">
+    <h2>📋 Playlist</h2>
+
+    <button class="cinza">
+      Gerenciar Playlist
+    </button>
+  </div>
+
+
+  <div class="card">
+    <h2>🖥️ Telas</h2>
+
+    <button class="cinza">
+      Gerenciar TVs
+    </button>
+  </div>
+
+
+  <div class="card">
+    <h2>🕐 Programação</h2>
+
+    <button class="cinza">
+      Definir horários
+    </button>
+  </div>
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+'https://brqdnhqifzlqktxvvltb.supabase.co';
+
+const SUPABASE_KEY =
+'COLE_AQUI_SUA_CHAVE_ANON';
+
+
+const db = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY,
+  {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false
     }
+  }
+);
 
-    function montarUrlArquivo(arquivo) {
-      if (!arquivo) return '';
 
-      if (arquivo.startsWith('http://') || arquivo.startsWith('https://')) {
-        return arquivo;
+/* ABRIR FORMULÁRIO */
+
+function abrirFormulario() {
+
+  document
+    .getElementById('formAnuncio')
+    .style.display = 'block';
+
+}
+
+
+/* FECHAR FORMULÁRIO */
+
+function fecharFormulario() {
+
+  document
+    .getElementById('formAnuncio')
+    .style.display = 'none';
+
+}
+
+
+/* SALVAR ANÚNCIO */
+
+async function salvarAnuncio() {
+
+  const nome =
+    document
+      .getElementById('nomeAnuncio')
+      .value.trim();
+
+
+  const arquivo =
+    document
+      .getElementById('arquivoAnuncio')
+      .files[0];
+
+
+  const duracao =
+    document
+      .getElementById('duracaoAnuncio')
+      .value;
+
+
+  const mensagem =
+    document
+      .getElementById('mensagem');
+
+
+  if (!nome) {
+
+    mensagem.textContent =
+      'Digite o nome do anúncio.';
+
+    return;
+
+  }
+
+
+  if (!arquivo) {
+
+    mensagem.textContent =
+      'Escolha uma imagem ou vídeo.';
+
+    return;
+
+  }
+
+
+  mensagem.textContent =
+    'Enviando arquivo...';
+
+
+  let tipo = 'imagem';
+
+
+  if (arquivo.type.startsWith('video/')) {
+
+    tipo = 'video';
+
+  }
+
+
+  const nomeLimpo =
+    arquivo.name.replace(
+      /[^a-zA-Z0-9._-]/g,
+      '_'
+    );
+
+
+  const nomeArquivo =
+    Date.now() +
+    '_' +
+    nomeLimpo;
+
+
+  /* UPLOAD PARA STORAGE */
+
+  const {
+    data: uploadData,
+    error: erroUpload
+  } =
+    await db
+      .storage
+      .from('midias')
+      .upload(
+        nomeArquivo,
+        arquivo,
+        {
+          cacheControl: '3600',
+          upsert: false,
+          contentType: arquivo.type
+        }
+      );
+
+
+  if (erroUpload) {
+
+    console.error(
+      'Erro no upload:',
+      erroUpload
+    );
+
+    mensagem.textContent =
+      'Erro ao enviar arquivo: ' +
+      erroUpload.message;
+
+    return;
+
+  }
+
+
+  console.log(
+    'Upload concluído:',
+    uploadData
+  );
+
+
+  /* URL PÚBLICA */
+
+  const {
+    data: dadosUrl
+  } =
+    db
+      .storage
+      .from('midias')
+      .getPublicUrl(
+        nomeArquivo
+      );
+
+
+  const urlArquivo =
+    dadosUrl.publicUrl;
+
+
+  console.log(
+    'URL pública:',
+    urlArquivo
+  );
+
+
+  /* DURAÇÃO */
+
+  let duracaoFinal = null;
+
+
+  if (tipo === 'imagem') {
+
+    duracaoFinal =
+      Number(duracao) * 1000;
+
+  }
+
+
+  /* SALVAR NA TABELA */
+
+  const {
+    data: anuncioCriado,
+    error: erroBanco
+  } =
+    await db
+      .from('anuncios')
+      .insert([
+        {
+          nome: nome,
+          tipo: tipo,
+          arquivo: urlArquivo,
+          duracao: duracaoFinal,
+          ativo: true
+        }
+      ])
+      .select();
+
+
+  if (erroBanco) {
+
+    console.error(
+      'Erro no banco:',
+      erroBanco
+    );
+
+    mensagem.textContent =
+      'Arquivo enviado, mas ocorreu erro ao cadastrar o anúncio.';
+
+    return;
+
+  }
+
+
+  console.log(
+    'Anúncio criado:',
+    anuncioCriado
+  );
+
+
+  mensagem.textContent =
+    '✅ Anúncio cadastrado com sucesso!';
+
+
+  document
+    .getElementById('nomeAnuncio')
+    .value = '';
+
+
+  document
+    .getElementById('arquivoAnuncio')
+    .value = '';
+
+
+  document
+    .getElementById('duracaoAnuncio')
+    .value = '5';
+
+}
+
+
+/* CARREGAR ANÚNCIOS */
+
+async function carregarAnunciosPainel() {
+
+  const {
+    data,
+    error
+  } =
+    await db
+      .from('anuncios')
+      .select('*')
+      .order(
+        'created_at',
+        {
+          ascending: false
+        }
+      );
+
+
+  if (error) {
+
+    console.error(
+      'Erro ao carregar anúncios:',
+      error
+    );
+
+    return [];
+
+  }
+
+
+  return data || [];
+
+}
+
+
+/* MOSTRAR ANÚNCIOS */
+
+async function mostrarAnuncios() {
+
+  const lista =
+    document
+      .getElementById(
+        'listaAnuncios'
+      );
+
+
+  if (lista.style.display === 'block') {
+
+    lista.style.display =
+      'none';
+
+    return;
+
+  }
+
+
+  lista.style.display =
+    'block';
+
+
+  lista.innerHTML =
+    '<p>Carregando...</p>';
+
+
+  const anuncios =
+    await carregarAnunciosPainel();
+
+
+  lista.innerHTML = '';
+
+
+  if (anuncios.length === 0) {
+
+    lista.innerHTML =
+      '<p>Nenhum anúncio cadastrado.</p>';
+
+    return;
+
+  }
+
+
+  anuncios.forEach(
+    anuncio => {
+
+      const card =
+        document
+          .createElement('div');
+
+
+      card.className =
+        'anuncio-item';
+
+
+      const nome =
+        document
+          .createElement('strong');
+
+
+      nome.textContent =
+        anuncio.nome ||
+        'Sem nome';
+
+
+      card.appendChild(nome);
+
+
+      /* IMAGEM */
+
+      if (anuncio.tipo === 'imagem') {
+
+        const img =
+          document
+            .createElement('img');
+
+
+        img.src =
+          anuncio.arquivo;
+
+
+        img.className =
+          'preview';
+
+
+        card.appendChild(img);
+
       }
 
-      return `${SUPABASE_URL}/storage/v1/object/public/midias/${arquivo}`;
-    }
 
-    function proximo() {
-      if (!anuncios.length) {
-        limparPlayer();
-        player.innerHTML = '<div class="mensagem">Nenhum anúncio ativo encontrado.</div>';
-        return;
+      /* VÍDEO */
+
+      if (anuncio.tipo === 'video') {
+
+        const video =
+          document
+            .createElement('video');
+
+
+        video.src =
+          anuncio.arquivo;
+
+
+        video.controls =
+          true;
+
+
+        video.className =
+          'preview';
+
+
+        card.appendChild(video);
+
       }
 
-      if (atual >= anuncios.length) {
-        atual = 0;
-      }
 
-      const anuncio = anuncios[atual];
-      limparPlayer();
+      const tipo =
+        document
+          .createElement('p');
 
-      const tipo = (anuncio.tipo || '').toLowerCase();
-      const arquivo = montarUrlArquivo(anuncio.arquivo);
 
-      if (!arquivo) {
-        atual++;
-        proximo();
-        return;
-      }
+      tipo.textContent =
+        'Tipo: ' +
+        anuncio.tipo;
 
-      if (tipo === 'video') {
-        const video = document.createElement('video');
-        video.src = arquivo;
-        video.autoplay = true;
-        video.muted = true;
-        video.playsInline = true;
-        video.controls = false;
 
-        video.onended = () => {
-          atual++;
-          proximo();
-        };
+      card.appendChild(tipo);
 
-        video.onerror = () => {
-          atual++;
-          proximo();
-        };
 
-        player.appendChild(video);
+      const duracao =
+        document
+          .createElement('p');
+
+
+      if (
+        anuncio.tipo === 'imagem' &&
+        anuncio.duracao
+      ) {
+
+        duracao.textContent =
+          'Duração: ' +
+          (
+            anuncio.duracao /
+            1000
+          ) +
+          ' segundos';
+
       } else {
-        const img = document.createElement('img');
-        img.src = arquivo;
-        img.alt = anuncio.nome || 'Anúncio';
 
-        img.onerror = () => {
-          atual++;
-          proximo();
-        };
+        duracao.textContent =
+          'Duração: vídeo completo';
 
-        player.appendChild(img);
-
-        const duracao = Number(anuncio.duracao) > 0 ? Number(anuncio.duracao) : 5;
-
-        timer = setTimeout(() => {
-          atual++;
-          proximo();
-        }, duracao * 1000);
-      }
-    }
-
-    async function carregarAnuncios() {
-      const { data, error } = await db
-        .from('anuncios')
-        .select('*')
-        .eq('ativo', true)
-        .order('created_at', { ascending: true });
-
-      if (error) {
-        console.error('Erro ao carregar anúncios:', error);
-        limparPlayer();
-        player.innerHTML = '<div class="mensagem">Erro ao carregar anúncios.</div>';
-        return;
       }
 
-      anuncios = data || [];
-      atual = 0;
 
-      console.log('Anúncios carregados:', anuncios);
-      proximo();
+      card.appendChild(duracao);
+
+
+      const status =
+        document
+          .createElement('p');
+
+
+      if (anuncio.ativo) {
+
+        status.textContent =
+          '● Status: Ativo';
+
+        status.className =
+          'ativo';
+
+      } else {
+
+        status.textContent =
+          '● Status: Inativo';
+
+        status.className =
+          'inativo';
+
+      }
+
+
+      card.appendChild(status);
+
+      lista.appendChild(card);
+
     }
+  );
 
-    carregarAnuncios();
+}
 
-    // atualiza a lista periodicamente
-    setInterval(() => {
-      carregarAnuncios();
-    }, 60000);
-  </script>
+</script>
+
 </body>
 </html>
